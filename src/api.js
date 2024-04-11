@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import Line from "./lineChart";
 import "./api.css";
 
+// set of url for the two endpoints
 const apiSet = [
   "https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=IBM&apikey=demo",
   "https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=IBM&apikey=demo",
 ];
+
 const Api = () => {
   const [data, setData] = useState([]);
   const [selectedDatasetIndex, setSelectedDatasetIndex] = useState("");
@@ -17,7 +19,9 @@ const Api = () => {
     fetchData();
   }, []);
 
+  // fetch data from the two endpoints using Promise.all
   const fetchData = async () => {
+    // use try catch to handle failed requests
     try {
       setLoading(true);
       const fetchPromises = apiSet.map((url) =>
@@ -28,10 +32,12 @@ const Api = () => {
         })
       );
       const results = await Promise.all(fetchPromises);
+      // only retreive quarterlyReports for both datasets
       const quarterlyData = results.map((result) => result.quarterlyReports);
       setData(quarterlyData);
       if (quarterlyData[selectedDatasetIndex]?.length > 0) {
-        const firstItem = quarterlyData[selectedDatasetIndex][0];
+        const firstItem = quarterlyData[selectedDatasetIndex][0]; //time as x-value for chart
+        // remove property fiscalDateEnding and reportedCurrency
         const availableProperties = Object.keys(firstItem).filter(
           (prop) => prop !== "fiscalDateEnding" && prop !== "reportedCurrency"
         );
@@ -56,6 +62,7 @@ const Api = () => {
         Number(report[selectedProperty])
       ) || [];
 
+    // chart data
     return {
       labels,
       datasets: [
@@ -64,13 +71,13 @@ const Api = () => {
           data: values,
           fill: false,
           backgroundColor: "rgba(29, 161, 242, 0.2)",
-          borderColor: "rgb(29, 161, 242)",
-          pointBackgroundColor: "rgb(255, 192, 203)",
+          borderColor: "rgb(29, 161, 242)", // blue
+          pointBackgroundColor: "rgb(255, 192, 203)", //pink
         },
       ],
     };
   };
-
+  // handling loading and error situation
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
