@@ -8,6 +8,10 @@ const apiSet = [
   "https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=IBM&apikey=demo",
 ];
 
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 const Api = () => {
   const [data, setData] = useState([]);
   const [selectedDatasetIndex, setSelectedDatasetIndex] = useState("");
@@ -67,7 +71,7 @@ const Api = () => {
       labels,
       datasets: [
         {
-          label: selectedProperty,
+          label: capitalizeFirstLetter(selectedProperty),
           data: values,
           fill: false,
           backgroundColor: "rgba(29, 161, 242, 0.2)",
@@ -83,7 +87,7 @@ const Api = () => {
 
   return (
     <div className="container">
-      <h1 className="title">Quarterly Reports (USD)</h1>
+      <h1 className="title">Quarterly Reports (in USD)</h1>
       <div className="dropdowns">
         <select
           value={selectedDatasetIndex}
@@ -106,7 +110,7 @@ const Api = () => {
               if (prop !== "fiscalDateEnding" && prop !== "reportedCurrency") {
                 return (
                   <option key={prop} value={prop}>
-                    {prop}
+                    {capitalizeFirstLetter(prop)}
                   </option>
                 );
               }
