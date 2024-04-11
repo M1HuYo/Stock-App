@@ -103,7 +103,7 @@ const Api = () => {
           onChange={(e) => setSelectedProperty(e.target.value)}
           className="dropdown"
         >
-          <option value="">Select Property</option>
+          <option value="">Select Value</option>
           {selectedDatasetIndex &&
             data[selectedDatasetIndex]?.length > 0 &&
             Object.keys(data[selectedDatasetIndex][0]).map((prop) => {
